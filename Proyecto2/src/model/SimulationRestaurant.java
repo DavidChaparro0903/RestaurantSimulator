@@ -36,6 +36,7 @@ public class SimulationRestaurant {
 		for (int i = 1; i <= simulation; i++) {
 			System.out.println("---------------Tiempo del simulador : " + i);
 			generateStudent();
+			generateLunch();
 			attendPayPoint();
 			traverseAuxiliaryQueu();
 			System.out.println("Tiempo restante del contador : " + countGenerateStudent);
@@ -62,7 +63,7 @@ public class SimulationRestaurant {
 			stackLunch.push(lunch);
 			System.out.println("Almuerzo apilado: " + lunch.getIdLunch());
 			countGenerateLunch = 5;
-			System.out.println("Nuevo contador almuerzo" + countGenerateLunch);
+			System.out.println("Nuevo contador almuerzo: " + countGenerateLunch);
 		 }
 	}
 
@@ -71,12 +72,14 @@ public class SimulationRestaurant {
 	}
 	
 
-	public boolean isTimeGenerateLunch() {
-		return countGenerateStudent == 0 ? true : false;
-	}
 
 	public int substractGeneratorStudentTime() {
 		return countGenerateStudent--;
+	}
+
+	
+	public boolean isTimeGenerateLunch() {
+		return countGenerateLunch == 0 ? true : false;
 	}
 
 	public int substractGeneratorLunchTime() {
