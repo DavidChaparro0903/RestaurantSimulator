@@ -19,6 +19,9 @@ public class SimpleList<T> implements Iterable<T>{
 	public SimpleList() {
 		this.head = null;
 	}
+	
+	
+	/*Inserta un dato en la lista simple*/
 
 	public void insert(T data) {
 		if(data != null) {
@@ -36,6 +39,8 @@ public class SimpleList<T> implements Iterable<T>{
 	
 	}
 
+	
+	/*Comprueba si existe ese determinado elemento en la lista*/
 	public boolean exist(T data) {
 		Node<T> var = head;
 		while (var != null) {
@@ -48,33 +53,18 @@ public class SimpleList<T> implements Iterable<T>{
 		return false;
 	}
 
+	
+	
+	/*Observa si la lista esta vacia o no, si lo esta retorna verdadero*/
 
 
 	public boolean isEmpty() {
 		return (head == null) ? true : false;
 	}
 	
+
 	
-//	public int getSize() {
-//		int count = 0;
-//		while (head != null) {
-//			count++;
-//		}
-//		return count;
-//	}
-//
-//	public String show() {
-//		Node<T> temp = head;
-//		String result = "";
-//		int count = 0;
-//		while (count < getSize()) {
-//			result += temp.getValue();
-//			result += "\n";
-//			temp = temp.getNext();
-//			count++;
-//		}
-//		return result;
-//	}
+	/*Metodo encargado de borrar un dato de una lista simple*/
 
 	public void delete(T data) {
 		if(!isEmpty()) {
@@ -106,6 +96,9 @@ public class SimpleList<T> implements Iterable<T>{
 		}
 	}
 
+	
+	
+	/*Genera un iterador para recorrer la lista simple*/
 	@Override
 	public Iterator<T> iterator() {
 		Iterator<T> myIterator = new Iterator<T>() {

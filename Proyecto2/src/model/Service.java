@@ -1,5 +1,6 @@
 package model;
 
+import constants.Constants;
 import tool.Tool;
 
 public class Service {
@@ -9,12 +10,6 @@ public class Service {
 	private Lunch lunch;
 	private int timeService;
 	
-	
-//	public Service(Student student, Lunch lunch) {
-//		this.student = student;
-//		this.lunch = lunch;
-//		this.timeService = Tool.getRandom(5, 15);
-//	}
 	
 	public Service() {
 		
@@ -58,18 +53,27 @@ public class Service {
 		return timeService == 0;
 	}
 	
+	
+	/*Metodo encargado de generar el tiempo de servicio dependiendo los rangos*/
 	public int generateTimeService() {
-		return Tool.getRandom(5, 15);
+		return Tool.getRandom(Constants.LOWER_RANGE_TIME_SERVICE, Constants.UPPER_RANGE_TIME_SERVICE);
 	}
+	
+	
+	/*
+	 * Metodo encargado de actualizar el tiempo de servicio, dodnde si llega a cero se libera el servicio, 
+	 * dandole paso a otro estudiante para que entre por el el tiempo que se genero, cuandos se libera se elimina
+	 * el estudiante y el almuerzo que se tenai en ese momento
+	 * 
+	 * */
 	
 	public String updateTimeService() {
 		if(this.isBusy()) {
 			 this.substractService();
 			System.out.println("Tiempo de restante de atencion almuerzo: "+ this. getTimeService() + "  Para el estudiante: " + student.getIdStudent());
 			System.out.println("Entro a recibir el almuerzo el estudiante: " + student.getIdStudent() + " El almuerzo: " + lunch.getIdLunch());
-		
 			 if(this.finishService()) {
-				return  liberateService();
+				return liberateService();
 			 }
 		}
 		return null;

@@ -4,21 +4,43 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import comparator.StudentComparator;
+import constants.Constants;
 import listSimple.SimpleList;
 import queu.Queu;
 import tool.Tool;
 
 public class SimulationRestaurant {
-
+	
+	
+	/*Cola de estudiantes que van a pasar al punto de pago*/
 	private Queu<Student> arrivalQueu;
+	/*Lista simple con estudiantes que ya salieron del punto de pago y van a desplazarse a la cola de servicio
+	 * 
+	 * Objetivo : Esta lista sirve como auxiliar para guardar los estudiantes que ya salieron del punto de pago, 
+	 * pero no han llegado a la cola de servicio, ya que primero se debe evaluar el tiempo de desplazamiento del estudiante
+	 *  
+	 *  */
 	private SimpleList<Student> listAux;
+	/*
+	 * Lista simple que guarda el id del estudiante y el id del menaje, despues de salir del servicio
+	 * */
 	private SimpleList<String> listResult;
+	
+	/*Cola de servicio: guarda los estudiantes que ya se evaluo el tiempo de desplzamiento  y ya llegan a formarse a la cola*/
 	private Queu<Student> queuService;
+	
+	/*Pila de almuerzo : Se almacenan los almuerzos que se generan cada 5 segundoa*/
 	private Stack<Lunch> stackLunch;
+	/*Punto de pago 1*/
 	private PayPoint payPointOne;
+	/*Punto de pago 2*/
 	private PayPoint payPointTwo;
+	/*Representa el servicio se tiene en cuenta el estudiante y el menaje, aca el estudiante va a tener un tiempo de atención aleatorio*/
 	private Service service;
+	
+	/*Contador que se decrementa para tener en cuenta cuando generar un estudiante nuevo*/
 	private static int countGenerateStudent;
+	/*Contador que se decrementa para tener en cuenta cuando generar un menaje nuevo*/
 	private static int countGenerateLunch;
 
 	public SimulationRestaurant() {
@@ -32,34 +54,59 @@ public class SimulationRestaurant {
 		service = new Service();
 
 	}
+	
+	
+	
+	/*
+	 * Metodo principal del programa donde se genera la simulación del sistema
+	 * 
+	 * Primero se parte de inicializar los contadores countGenerateStudent y countGenerateLunch, el primero
+	 * con un  numero aletorio en un rango de 0 - 15, y el segundo con numero fijo con un valor de 5, posteriormente
+	 * se entra a un ciclo que se va a repetir dependiendo el tiempo de la simulación, y este llamada a los metodos
+	 * generar estudiante, generar almuerzo, atender en punto de pago, llenar lista auxiliar y recibir almuerzo
+	 * */
 
 	public void generateSimulation(int simulation) throws InterruptedException {
-		countGenerateStudent = Tool.getRandom(0, 15);
-		countGenerateLunch = 5;
+		countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
+		countGenerateLunch = Constants.LUNCH_TIME;
 		System.out.println("Contador generado al empezar la simulación : " + countGenerateStudent);
 		for (int i = 1; i <= simulation; i++) {
 			System.out.println("---------------Tiempo del simulador : " + i);
 			generateStudent();
 			generateLunch();
 			attendPayPoint();
-			traverseAuxiliaryList();
+			fillAuxiliaryList();
 			receiveLunch();
 			System.out.println("Tiempo restante del contador : " + countGenerateStudent);
-			//Thread.sleep(5000);
+			//Thread.sleep(1000);
 		}
 
 	}
 
+	
+	/*
+	 * El metodo generar estudiante tiene el objetivo de que cuando el contador countGenerateStudent llegue a 
+	 * cero agregue un estudiante nuevo a la cola de llegada, y cuando lo genere volver a tomar un numero aletorio
+	 * 
+	 * */
+	
 	public void generateStudent() {
 		substractGeneratorStudentTime();
 		if (isTimeGenerateStudent()) {
 			Student student = new Student();
 			arrivalQueu.push(student);
 			System.out.println("Estudiante creado: " + student.getIdStudent());
-			countGenerateStudent = Tool.getRandom(0, 15);
+			countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
 			System.out.println("Nuevo random generador al contador: " + countGenerateStudent);
 		}
 	}
+	
+	
+	/*
+	 * El metodo generar almuerzo tiene el objetivo de que cuando el contador countGenerateLunch llegue a 
+	 * cero agregue un almuerzo nuevo a la pila de almuerzos, y volver a darle un valor fijo de 5 al contador
+	 * 
+	 * */
 	
 	public void generateLunch() {
 		 substractGeneratorLunchTime();
@@ -67,32 +114,48 @@ public class SimulationRestaurant {
 			Lunch lunch = new Lunch();
 			stackLunch.push(lunch);
 			System.out.println("Almuerzo apilado: " + lunch.getIdLunch());
-			countGenerateLunch = 5;
-			//System.out.println("Nuevo contador almuerzo: " + countGenerateLunch);
+			countGenerateLunch = Constants.LUNCH_TIME;
 		 }
 	}
+	
+	
+	/*Si el contador es 0 o menos genere un estudiante*/
 
 	public boolean isTimeGenerateStudent() {
 		return countGenerateStudent <= 0 ? true : false;
 	}
 	
+	/*Disminuir en uno el contador de estudiante*/
+	
 	public int substractGeneratorStudentTime() {
 		return countGenerateStudent--;
 	}
 
+	/*Si el contador es 0 genere un almuerzo */
 	
 	public boolean isTimeGenerateLunch() {
 		return countGenerateLunch == 0 ? true : false;
 	}
 
+	/*Disminuir en uno el contador de almuerzo*/
 	public int substractGeneratorLunchTime() {
 		return countGenerateLunch--;
 	}
+	
+	
+	/*Hace el llamado de los dos puntos de pago*/
 	
 	public void attendPayPoint() {
 		attendPayPointOne();
 		attendPayPointTwo();
 	}
+	
+	
+	/*Representa el punto de pago uno, y observa si la cola de llegada esta vacio y si el punto de pago no esta ocupado, 
+	 * Si se cumplen estas condiciones se agrega un estudiante al punto de pago, de lo contrario si se encuentra ocupado 
+	 * se resta el tiempo de atención que va a tener el estudiante
+	 * 
+	 * */
 
 	public void attendPayPointOne() {
 		System.out.println("--------------------Punto de pago Uno--------------------");
@@ -106,6 +169,12 @@ public class SimulationRestaurant {
 
 	}
 
+	
+	/*Representa el punto de pago dos, observa si la cola de llegada esta vacio y si el punto de pago no esta ocupado, 
+	 * Si se cumplen estas condiciones se agrega un estudiante al punto de pago, de lo contrario si se encuentra ocupado 
+	 * se resta el tiempo de atención que va a tener el estudiante
+	 * 
+	 * */
 	public void attendPayPointTwo() {
 		System.out.println("--------------------Punto de pago Dos--------------------");
 		if (!arrivalQueu.isEmpty()) {
@@ -121,7 +190,15 @@ public class SimulationRestaurant {
 
 	
 	
-	public void traverseAuxiliaryList() {
+	/*
+	 * Este metodo llena una lista auxiliar, que tiene omo objetivo almacenar los estudiantes que ya pasaron por el punto de 
+	 * pago y van hacia la cola de servicio, en este metodo se evalua el tiempo que tarda el estudiante en llegar a esa cola 
+	 * de servicio, y se disminuye en uno el tiempo cuando este tiempo llega a cero se elimina de la lista auxiliar y
+	 * se agrega a la cola de servicio
+	 * 	 
+	 * */
+	
+	public void fillAuxiliaryList() {
 		Iterator<Student> iterator = listAux.iterator();
 		while (iterator.hasNext()) {
 			Student student = iterator.next();
@@ -135,6 +212,12 @@ public class SimulationRestaurant {
 		}
 	}
 	
+	
+	
+	/*Metodo que se encarga de mirar la pila de servicio, y si esta tiene estudiante y existen almuerzos, el primer estudiante 
+	 * formado en la cola, pase a recibir su menaje, esto tambien tiene un tiempo de atencion y en el servicio solo se puede tener
+	 * un estudiante a la vez, despues de pasado ese tiempo pasa el siguiente de la cola
+	 *  */
 	
 	public void receiveLunch() {
 		if(!queuService.isEmpty() && !stackLunch.isEmpty()) {
@@ -180,40 +263,4 @@ public class SimulationRestaurant {
 		return listResult;
 	}
 
-	public static void main(String[] args) {
-		SimulationRestaurant simulation = new SimulationRestaurant();
-		// simulation.generateStudent(20,1,3);
-		try {
-			simulation.generateSimulation(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(simulation.getPayPointOne().getBill());
-		System.out.println(simulation.getPayPointTwo().getBill());
-		Iterator<Student> iterator = simulation.getListAux().iterator();
-		System.out.println("-----------------Lista enlazada------------------");
-		while (iterator.hasNext()) {
-			System.out.println(iterator.next().getIdStudent());
-			
-		}
-		System.out.println("-------------------------------------------------");
-		Iterator<Student> iteratorQueu = simulation.getQueuService().iterator();
-		System.out.println("-----------------Cola de servicio------------------");
-		while (iteratorQueu.hasNext()) {
-			System.out.println(iteratorQueu.next().getIdStudent());	
-		}
-		System.out.println("-------------------------------------------------");
-		
-		System.out.println("-----------------Lista de estudiante y almuerzo------------------");
-		Iterator<String> iteratorResult = simulation.getListResult().iterator();
-		while (iteratorResult.hasNext()) {
-			System.out.println(iteratorResult.next());	
-		}
-		System.out.println("-------------------------------------------------");
-		//System.out.println("Lista auxiliar:  " +  simulation.getListAux().getSize());
-//		Stack<Student> stack = simulation.getStack();
-//		System.out.println(stack.size());
-
-	}
 }

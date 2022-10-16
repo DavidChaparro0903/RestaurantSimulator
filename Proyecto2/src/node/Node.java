@@ -1,7 +1,11 @@
 package node;
 
 public class Node<T> {
+	
+	/*Dato que guarda el nodo*/
 	private T data;
+	
+	/*Referencia al siguiente nodo*/
 	private Node<T> next;
 	
 	public Node(T data) {

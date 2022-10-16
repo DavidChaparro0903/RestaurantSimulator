@@ -1,17 +1,26 @@
 package model;
 
+import constants.Constants;
+
 public class PayPoint {
+	
+	
 
 	private Student student;
+	
 	private int bill;
 
 	public PayPoint() {
 
 	}
+	
+	
+	/*Este metodo se encarga de recibir un estudiante como argumento, y sumarle el valor del credito para asi 
+	 * ir acumulando en cada punto de pago por cada estudiante que atienda*/
 
 	public void serveStudent(Student student) {
 		this.student = student;
-		this.bill += 2800;
+		this.bill += Constants.CREDIT_VALUE;
 
 	}
 
@@ -33,6 +42,12 @@ public class PayPoint {
 		return student.getTimeAttention() == 0;
 	}
 
+	
+	/*
+	 * Metodo encargado de actualizar, el tiempo que el estudiante va a ser atendido, cuando sea igual a 
+	 * cero libera el punto de atención para que entre otro estudiante
+	 * 
+	 * */
 	public Student updateTimePayPoint() {
 		if (isBusy()) {
 			student.subtractAttentionTime();
@@ -51,17 +66,6 @@ public class PayPoint {
 		return bill;
 	}
 
-	public static void main(String[] args) {
-		PayPoint payPoint = new PayPoint();
-		Student student = new Student();
-		// student.setTimeAttention(10);
-		payPoint.serveStudent(student);
-		for (int i = 0; i < 50; i++) {
-			payPoint.updateTimePayPoint();
-		}
 
-		System.out.println(payPoint.getBill());
-
-	}
 
 }
