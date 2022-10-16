@@ -14,6 +14,11 @@ public class SimpleList<T> implements Iterable<T>{
 		this.head = null;
 		this.comparator = comparator;
 	}
+	
+	
+	public SimpleList() {
+		this.head = null;
+	}
 
 	public void insert(T data) {
 		if(data != null) {

@@ -12,10 +12,12 @@ public class SimulationRestaurant {
 
 	private Queu<Student> arrivalQueu;
 	private SimpleList<Student> listAux;
+	private SimpleList<String> listResult;
 	private Queu<Student> queuService;
 	private Stack<Lunch> stackLunch;
 	private PayPoint payPointOne;
 	private PayPoint payPointTwo;
+	private Service service;
 	private static int countGenerateStudent;
 	private static int countGenerateLunch;
 
@@ -26,6 +28,8 @@ public class SimulationRestaurant {
 		payPointOne = new PayPoint();
 		payPointTwo = new PayPoint();
 		stackLunch = new Stack<Lunch>();
+		listResult = new SimpleList<String>();
+		service = new Service();
 
 	}
 
@@ -38,7 +42,8 @@ public class SimulationRestaurant {
 			generateStudent();
 			generateLunch();
 			attendPayPoint();
-			traverseAuxiliaryQueu();
+			traverseAuxiliaryList();
+			receiveLunch();
 			System.out.println("Tiempo restante del contador : " + countGenerateStudent);
 			//Thread.sleep(5000);
 		}
@@ -63,7 +68,7 @@ public class SimulationRestaurant {
 			stackLunch.push(lunch);
 			System.out.println("Almuerzo apilado: " + lunch.getIdLunch());
 			countGenerateLunch = 5;
-			System.out.println("Nuevo contador almuerzo: " + countGenerateLunch);
+			//System.out.println("Nuevo contador almuerzo: " + countGenerateLunch);
 		 }
 	}
 
@@ -71,8 +76,6 @@ public class SimulationRestaurant {
 		return countGenerateStudent <= 0 ? true : false;
 	}
 	
-
-
 	public int substractGeneratorStudentTime() {
 		return countGenerateStudent--;
 	}
@@ -118,12 +121,12 @@ public class SimulationRestaurant {
 
 	
 	
-	public void traverseAuxiliaryQueu() {
+	public void traverseAuxiliaryList() {
 		Iterator<Student> iterator = listAux.iterator();
 		while (iterator.hasNext()) {
 			Student student = iterator.next();
-			System.out.println("Tiempo restante de desplazamiento del estudiante: " + student.getDisplacementTime()+ " " + student.getIdStudent());
 			student.subtractDisplacementTime();
+			System.out.println("Tiempo restante de desplazamiento del estudiante: " + student.getDisplacementTime()+ " " + student.getIdStudent());
 			if(student.isInTheServiceLine()) {
 				listAux.delete(student);
 				System.out.println(" LLego a la cola de servicio " + " el estudiante " + student.getIdStudent());
@@ -132,6 +135,17 @@ public class SimulationRestaurant {
 		}
 	}
 	
+	
+	public void receiveLunch() {
+		if(!queuService.isEmpty() && !stackLunch.isEmpty()) {
+			if(!service.isBusy()) {
+				service.setLunch(stackLunch.pop());
+				service.setStudent(queuService.remove());
+				service.setTimeService(service.generateTimeService()); 
+			}
+		}
+		listResult.insert(service.updateTimeService());
+	}
 
 	public PayPoint getPayPointOne() {
 		return payPointOne;
@@ -158,26 +172,19 @@ public class SimulationRestaurant {
 	}
 	
 	
-	
-
-
-//	public Stack<Student> getStack(){
-//		return stack;
-//	}
-
-	
-
-	
-
 	public SimpleList<Student> getListAux() {
 		return listAux;
+	}
+	
+	public SimpleList<String> getListResult(){
+		return listResult;
 	}
 
 	public static void main(String[] args) {
 		SimulationRestaurant simulation = new SimulationRestaurant();
 		// simulation.generateStudent(20,1,3);
 		try {
-			simulation.generateSimulation(40);
+			simulation.generateSimulation(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,6 +205,12 @@ public class SimulationRestaurant {
 		}
 		System.out.println("-------------------------------------------------");
 		
+		System.out.println("-----------------Lista de estudiante y almuerzo------------------");
+		Iterator<String> iteratorResult = simulation.getListResult().iterator();
+		while (iteratorResult.hasNext()) {
+			System.out.println(iteratorResult.next());	
+		}
+		System.out.println("-------------------------------------------------");
 		//System.out.println("Lista auxiliar:  " +  simulation.getListAux().getSize());
 //		Stack<Student> stack = simulation.getStack();
 //		System.out.println(stack.size());

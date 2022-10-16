@@ -28,19 +28,20 @@ public class PayPoint {
 		this.student = null;
 		return student;
 	}
-	
+
 	public boolean isFinishTimeAttention() {
 		return student.getTimeAttention() == 0;
 	}
 
 	public Student updateTimePayPoint() {
 		if (isBusy()) {
-			System.out.println("Tiempo de restante de atencion: "+ student.getTimeAttention() + "  Para el estudiante: " + student.getIdStudent());
 			student.subtractAttentionTime();
+			System.out.println("Tiempo de restante de atencion: " + student.getTimeAttention()
+					+ "  Para el estudiante: " + student.getIdStudent());
 			if (isFinishTimeAttention()) {
 				System.out.println("Liberar punto de pago");
 				return liberatePayPoint();
-				
+
 			}
 		}
 		return null;
@@ -49,19 +50,18 @@ public class PayPoint {
 	public int getBill() {
 		return bill;
 	}
-	
+
 	public static void main(String[] args) {
 		PayPoint payPoint = new PayPoint();
 		Student student = new Student();
-		//student.setTimeAttention(10);
+		// student.setTimeAttention(10);
 		payPoint.serveStudent(student);
 		for (int i = 0; i < 50; i++) {
 			payPoint.updateTimePayPoint();
 		}
-		
+
 		System.out.println(payPoint.getBill());
 
 	}
-		
 
 }
