@@ -49,7 +49,7 @@ public class Student {
 	}
 
 	public boolean isInTheServiceLine() {
-		return displacementTime == 0;
+		return displacementTime <= 0;
 	}
 
 	public int subtractDisplacementTime() {

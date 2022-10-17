@@ -101,9 +101,7 @@ public class SimulationRestaurant {
 		if (isTimeGenerateStudent()) {
 			Student student = new Student();
 			arrivalQueu.push(student);
-			//System.out.println("Estudiante creado: " + student.getIdStudent());
 			countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
-			//System.out.println("Nuevo random generador al contador: " + countGenerateStudent);
 			return student;
 		}
 		return null;
@@ -121,7 +119,6 @@ public class SimulationRestaurant {
 		 if(isTimeGenerateLunch()) {
 			Lunch lunch = new Lunch();
 			stackLunch.push(lunch);
-			//System.out.println("Almuerzo apilado: " + lunch.getIdLunch());
 			countGenerateLunch = Constants.LUNCH_TIME;
 			return lunch;
 		 }
@@ -144,7 +141,7 @@ public class SimulationRestaurant {
 	/*Si el contador es 0 genere un almuerzo */
 	
 	public boolean isTimeGenerateLunch() {
-		return countGenerateLunch == 0 ? true : false;
+		return countGenerateLunch <= 0 ? true : false;
 	}
 
 	/*Disminuir en uno el contador de almuerzo*/
@@ -168,7 +165,6 @@ public class SimulationRestaurant {
 	 * */
 
 	public String attendPayPointOne() {
-		//System.out.println("--------------------Punto de pago Uno--------------------");
 		if (!arrivalQueu.isEmpty()) {
 			if (!payPointOne.isBusy()) {
 				payPointOne.serveStudent(arrivalQueu.remove());
@@ -176,8 +172,6 @@ public class SimulationRestaurant {
 		}
 		listAux.insert(payPointOne.updateTimePayPoint());
 		return payPointOne.getResult();
-		//System.out.println("----------------------------------------");
-
 	}
 	
 	/*Representa el punto de pago dos, observa si la cola de llegada esta vacio y si el punto de pago no esta ocupado, 
@@ -186,7 +180,6 @@ public class SimulationRestaurant {
 	 * 
 	 * */
 	public String attendPayPointTwo() {
-		//System.out.println("--------------------Punto de pago Dos--------------------");
 		if (!arrivalQueu.isEmpty()) {
 			if (!payPointTwo.isBusy()) {
 				payPointTwo.serveStudent(arrivalQueu.remove());
@@ -195,7 +188,6 @@ public class SimulationRestaurant {
 		}
 		listAux.insert(payPointTwo.updateTimePayPoint());
 		return payPointTwo.getResult();
-		//System.out.println("----------------------------------------");
 	}
 		
 	/*
@@ -213,11 +205,9 @@ public class SimulationRestaurant {
 			Student student = iterator.next();
 			student.subtractDisplacementTime();
 			result += "Tiempo restante de desplazamiento del estudiante: " + student.getIdStudent() + " es de: "+ student.getDisplacementTime() +"\n";
-			//System.out.println("Tiempo restante de desplazamiento del estudiante: " + student.getDisplacementTime()+ " " + student.getIdStudent());
 			if(student.isInTheServiceLine()) {
 				listAux.delete(student);
 				result += "Llego a la cola de servicio " + " el estudiante " + student.getIdStudent() + "\n";
-				//System.out.println("Llego a la cola de servicio " + " el estudiante " + student.getIdStudent());
 				queuService.push(student);
 			}		
 		}

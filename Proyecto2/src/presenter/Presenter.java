@@ -27,16 +27,16 @@ public class Presenter {
 				init();
 				break;
 			case 2:
-			
-	
+				view.messageFinal();
 				break;
 			default:
+				view.messageErrorElection();
 				init();
 				break;
 			}
 		}catch(NumberFormatException e) {
-
-			init();;
+			view.messageErrorNumber();
+			init();
 		}
 		
 	}
@@ -57,7 +57,7 @@ public class Presenter {
 				showReceiveLunch();
 				showStudentsWithLunch();
 				view.showFinishLine();	
-				Thread.sleep(5000);
+				Thread.sleep(0);
 			}	
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

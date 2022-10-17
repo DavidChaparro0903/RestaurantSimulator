@@ -15,6 +15,7 @@ public class View {
 	
 	
 	public int getMenu() {
+		messageInit();
 		System.out.println(Constants.MENU);
 		return Integer.parseInt(scanner.nextLine());
 	}
@@ -98,6 +99,24 @@ public class View {
 		System.out.println("\nEstudiantes que ya recibieron menaje:\n");
 		System.out.println(result);
 		
+	}
+	
+	public void messageInit() {
+		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.println("+++++++++++++++++++++++++++" + "Bienvenido a la simulacion del restaurante" + "++++++++++++++++++++++++++++++++++++++++++++");
+		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	}
+	
+	public void messageFinal() {
+		System.out.println("----------------------------Muchas gracias por utilizar la aplicacion :)-------------------------------------------");
+	}
+	
+	public void messageErrorNumber() {
+		System.err.println("Por favor Ingrese un numero");
+	}
+	
+	public void messageErrorElection() {
+		System.err.println("Por favor Ingrese un numero en el rango que se encuentra en el menu");
 	}
 	
 	

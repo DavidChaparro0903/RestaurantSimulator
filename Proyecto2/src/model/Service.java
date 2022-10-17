@@ -50,7 +50,7 @@ public class Service {
 	
 	
 	public boolean finishService() {
-		return timeService == 0;
+		return timeService <= 0;
 	}
 	
 	
@@ -63,7 +63,7 @@ public class Service {
 	/*
 	 * Metodo encargado de actualizar el tiempo de servicio, dodnde si llega a cero se libera el servicio, 
 	 * dandole paso a otro estudiante para que entre por el el tiempo que se genero, cuandos se libera se elimina
-	 * el estudiante y el almuerzo que se tenai en ese momento
+	 * el estudiante y el almuerzo que se tenia en ese momento
 	 * 
 	 * */
 	
@@ -72,8 +72,6 @@ public class Service {
 		if(this.isBusy()) {
 			 this.substractService();
 			messageResult += "Tiempo de restante de atencion almuerzo: "+ this. getTimeService() + "  Para el estudiante: " + student.getIdStudent() + " Recibio el almuerzo: " +  lunch.getIdLunch() +"\n";
-			//System.out.println("Tiempo de restante de atencion almuerzo: "+ this. getTimeService() + "  Para el estudiante: " + student.getIdStudent() + " Recibio el almuerzo: " +  lunch.getIdLunch());
-			//System.out.println("Entro a recibir el almuerzo el estudiante: " + student.getIdStudent() + " El almuerzo: " + lunch.getIdLunch());
 			 if(this.finishService()) {
 				 messageResult += "Termino la atencion para el estudiante: " + student.getIdStudent();
 				return liberateService();

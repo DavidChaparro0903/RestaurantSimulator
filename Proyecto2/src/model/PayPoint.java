@@ -41,7 +41,7 @@ public class PayPoint {
 	}
 
 	public boolean isFinishTimeAttention() {
-		return student.getTimeAttention() == 0;
+		return student.getTimeAttention() <= 0;
 	}
 
 	
@@ -56,11 +56,8 @@ public class PayPoint {
 			this.student.subtractAttentionTime();
 			this.result = "Tiempo de restante de atencion: " + student.getTimeAttention()
 			+ "  Para el estudiante: " + student.getIdStudent();
-//			System.out.println("Tiempo de restante de atencion: " + student.getTimeAttention()
-//					+ "  Para el estudiante: " + student.getIdStudent());
 			if (isFinishTimeAttention()) {
 				this.result = "Liberar punto de pago ";
-				//System.out.println("Liberar punto de pago");
 				return liberatePayPoint();
 
 			}
