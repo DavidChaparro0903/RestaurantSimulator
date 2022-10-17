@@ -1,9 +1,6 @@
 package queu;
 
-import java.util.Comparator;
 import java.util.Iterator;
-
-import model.Student;
 import node.Node;
 
 public class Queu<T> implements Iterable<T>{

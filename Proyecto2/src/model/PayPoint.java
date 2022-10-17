@@ -9,9 +9,11 @@ public class PayPoint {
 	private Student student;
 	
 	private int bill;
+	
+	private String result = null;
 
+	
 	public PayPoint() {
-
 	}
 	
 	
@@ -49,12 +51,16 @@ public class PayPoint {
 	 * 
 	 * */
 	public Student updateTimePayPoint() {
+		this.result = null;
 		if (isBusy()) {
-			student.subtractAttentionTime();
-			System.out.println("Tiempo de restante de atencion: " + student.getTimeAttention()
-					+ "  Para el estudiante: " + student.getIdStudent());
+			this.student.subtractAttentionTime();
+			this.result = "Tiempo de restante de atencion: " + student.getTimeAttention()
+			+ "  Para el estudiante: " + student.getIdStudent();
+//			System.out.println("Tiempo de restante de atencion: " + student.getTimeAttention()
+//					+ "  Para el estudiante: " + student.getIdStudent());
 			if (isFinishTimeAttention()) {
-				System.out.println("Liberar punto de pago");
+				this.result = "Liberar punto de pago ";
+				//System.out.println("Liberar punto de pago");
 				return liberatePayPoint();
 
 			}
@@ -66,6 +72,13 @@ public class PayPoint {
 		return bill;
 	}
 
+	
+	public String getResult() {
+		return this.result;
+	}
 
+
+	
+	
 
 }

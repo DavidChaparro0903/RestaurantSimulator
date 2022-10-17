@@ -39,11 +39,14 @@ public class SimulationRestaurant {
 	private Service service;
 	
 	/*Contador que se decrementa para tener en cuenta cuando generar un estudiante nuevo*/
-	private static int countGenerateStudent;
+	private int countGenerateStudent;
 	/*Contador que se decrementa para tener en cuenta cuando generar un menaje nuevo*/
-	private static int countGenerateLunch;
+	private int countGenerateLunch;
 
-	public SimulationRestaurant() {
+	public SimulationRestaurant() {}
+	
+	
+	public void initializedSimulation() {
 		arrivalQueu = new Queu<Student>();
 		listAux = new SimpleList<Student>(new StudentComparator());
 		queuService = new Queu<Student>();
@@ -52,7 +55,9 @@ public class SimulationRestaurant {
 		stackLunch = new Stack<Lunch>();
 		listResult = new SimpleList<String>();
 		service = new Service();
-
+		countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
+		countGenerateLunch = Constants.LUNCH_TIME;
+		
 	}
 	
 	
@@ -66,21 +71,22 @@ public class SimulationRestaurant {
 	 * generar estudiante, generar almuerzo, atender en punto de pago, llenar lista auxiliar y recibir almuerzo
 	 * */
 
-	public void generateSimulation(int simulation) throws InterruptedException {
-		countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
-		countGenerateLunch = Constants.LUNCH_TIME;
+	public void generateSimulation(int init,int simulation) throws InterruptedException {
+//		countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
+//		countGenerateLunch = Constants.LUNCH_TIME;
+//		countGenerateStudent = numberGenerateStudent;
+//		countGenerateLunch = numberGenerateLunch;
 		System.out.println("Contador generado al empezar la simulación : " + countGenerateStudent);
-		for (int i = 1; i <= simulation; i++) {
-			System.out.println("---------------Tiempo del simulador : " + i);
+		for (int i = init; i <= simulation; i++) {
+			//System.out.println("---------------Tiempo del simulador : " + i);
 			generateStudent();
 			generateLunch();
 			attendPayPoint();
 			fillAuxiliaryList();
 			receiveLunch();
-			System.out.println("Tiempo restante del contador : " + countGenerateStudent);
+			//System.out.println("Tiempo restante del contador : " + countGenerateStudent);
 			//Thread.sleep(1000);
 		}
-
 	}
 
 	
@@ -90,15 +96,17 @@ public class SimulationRestaurant {
 	 * 
 	 * */
 	
-	public void generateStudent() {
+	public Student generateStudent() {
 		substractGeneratorStudentTime();
 		if (isTimeGenerateStudent()) {
 			Student student = new Student();
 			arrivalQueu.push(student);
-			System.out.println("Estudiante creado: " + student.getIdStudent());
+			//System.out.println("Estudiante creado: " + student.getIdStudent());
 			countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
-			System.out.println("Nuevo random generador al contador: " + countGenerateStudent);
+			//System.out.println("Nuevo random generador al contador: " + countGenerateStudent);
+			return student;
 		}
+		return null;
 	}
 	
 	
@@ -108,14 +116,16 @@ public class SimulationRestaurant {
 	 * 
 	 * */
 	
-	public void generateLunch() {
+	public Lunch generateLunch() {
 		 substractGeneratorLunchTime();
 		 if(isTimeGenerateLunch()) {
 			Lunch lunch = new Lunch();
 			stackLunch.push(lunch);
-			System.out.println("Almuerzo apilado: " + lunch.getIdLunch());
+			//System.out.println("Almuerzo apilado: " + lunch.getIdLunch());
 			countGenerateLunch = Constants.LUNCH_TIME;
+			return lunch;
 		 }
+		 return null;
 	}
 	
 	
@@ -157,26 +167,26 @@ public class SimulationRestaurant {
 	 * 
 	 * */
 
-	public void attendPayPointOne() {
-		System.out.println("--------------------Punto de pago Uno--------------------");
+	public String attendPayPointOne() {
+		//System.out.println("--------------------Punto de pago Uno--------------------");
 		if (!arrivalQueu.isEmpty()) {
 			if (!payPointOne.isBusy()) {
 				payPointOne.serveStudent(arrivalQueu.remove());
 			}
 		}
 		listAux.insert(payPointOne.updateTimePayPoint());
-		System.out.println("----------------------------------------");
+		return payPointOne.getResult();
+		//System.out.println("----------------------------------------");
 
 	}
-
 	
 	/*Representa el punto de pago dos, observa si la cola de llegada esta vacio y si el punto de pago no esta ocupado, 
 	 * Si se cumplen estas condiciones se agrega un estudiante al punto de pago, de lo contrario si se encuentra ocupado 
 	 * se resta el tiempo de atención que va a tener el estudiante
 	 * 
 	 * */
-	public void attendPayPointTwo() {
-		System.out.println("--------------------Punto de pago Dos--------------------");
+	public String attendPayPointTwo() {
+		//System.out.println("--------------------Punto de pago Dos--------------------");
 		if (!arrivalQueu.isEmpty()) {
 			if (!payPointTwo.isBusy()) {
 				payPointTwo.serveStudent(arrivalQueu.remove());
@@ -184,12 +194,10 @@ public class SimulationRestaurant {
 		
 		}
 		listAux.insert(payPointTwo.updateTimePayPoint());
-		System.out.println("----------------------------------------");
+		return payPointTwo.getResult();
+		//System.out.println("----------------------------------------");
 	}
-	
-
-	
-	
+		
 	/*
 	 * Este metodo llena una lista auxiliar, que tiene omo objetivo almacenar los estudiantes que ya pasaron por el punto de 
 	 * pago y van hacia la cola de servicio, en este metodo se evalua el tiempo que tarda el estudiante en llegar a esa cola 
@@ -198,18 +206,22 @@ public class SimulationRestaurant {
 	 * 	 
 	 * */
 	
-	public void fillAuxiliaryList() {
+	public String fillAuxiliaryList() {
+		String result = "";
 		Iterator<Student> iterator = listAux.iterator();
 		while (iterator.hasNext()) {
 			Student student = iterator.next();
 			student.subtractDisplacementTime();
-			System.out.println("Tiempo restante de desplazamiento del estudiante: " + student.getDisplacementTime()+ " " + student.getIdStudent());
+			result += "Tiempo restante de desplazamiento del estudiante: " + student.getIdStudent() + " es de: "+ student.getDisplacementTime() +"\n";
+			//System.out.println("Tiempo restante de desplazamiento del estudiante: " + student.getDisplacementTime()+ " " + student.getIdStudent());
 			if(student.isInTheServiceLine()) {
 				listAux.delete(student);
-				System.out.println(" LLego a la cola de servicio " + " el estudiante " + student.getIdStudent());
+				result += "Llego a la cola de servicio " + " el estudiante " + student.getIdStudent() + "\n";
+				//System.out.println("Llego a la cola de servicio " + " el estudiante " + student.getIdStudent());
 				queuService.push(student);
-			}			
+			}		
 		}
+		return result;
 	}
 	
 	
@@ -219,15 +231,16 @@ public class SimulationRestaurant {
 	 * un estudiante a la vez, despues de pasado ese tiempo pasa el siguiente de la cola
 	 *  */
 	
-	public void receiveLunch() {
+	public String receiveLunch() {
 		if(!queuService.isEmpty() && !stackLunch.isEmpty()) {
 			if(!service.isBusy()) {
 				service.setLunch(stackLunch.pop());
 				service.setStudent(queuService.remove());
-				service.setTimeService(service.generateTimeService()); 
+				service.setTimeService(service.generateTimeService());
 			}
 		}
 		listResult.insert(service.updateTimeService());
+		return service.getMessageResult();
 	}
 
 	public PayPoint getPayPointOne() {
@@ -254,6 +267,27 @@ public class SimulationRestaurant {
 		return queuService;
 	}
 	
+	public String showArrivalQueu() {
+		Iterator<Student> iterator = arrivalQueu.iterator();
+		String result = "";
+		while (iterator.hasNext()) {
+			result += iterator.next().getIdStudent() + "\n";
+		}
+		return result;
+	}
+	
+	
+	
+	
+	public String showQueuService() {
+		Iterator<Student> iterator = queuService.iterator();
+		String result = "";
+		while (iterator.hasNext()) {
+			result += iterator.next().getIdStudent() + "\n";
+		}
+		return result;
+	}
+	
 	
 	public SimpleList<Student> getListAux() {
 		return listAux;
@@ -263,4 +297,36 @@ public class SimulationRestaurant {
 		return listResult;
 	}
 
+	
+	public String showListResult() {
+		Iterator<String> iterator = listResult.iterator();
+		String result = "";
+		while (iterator.hasNext()) {
+			result += iterator.next() + "\n";
+		}
+		return result;
+	}
+	
+	
+
+	public int getCountGenerateStudent() {
+		return countGenerateStudent;
+	}
+
+
+	public int getCountGenerateLunch() {
+		return countGenerateLunch;
+	}
+	
+	public String getTotalPayPointOne() {
+		return "El dinero recogido del punto de pago 1 es: " + payPointOne.getBill();
+	}
+
+	
+	public String getTotalPayPointTwo() {
+		return "El dinero recogido del punto de pago 2 es: " + payPointTwo.getBill();
+	}
+
+	
+	
 }

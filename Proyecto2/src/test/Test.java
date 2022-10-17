@@ -1,6 +1,7 @@
 package test;
 import java.util.Iterator;
 
+import constants.Constants;
 import model.SimulationRestaurant;
 import model.Student;
 import queu.Queu;
@@ -65,9 +66,11 @@ public class Test {
 //		
 		//Simulacion
 		SimulationRestaurant simulation = new SimulationRestaurant();
+		simulation.initializedSimulation() ;
 		// simulation.generateStudent(20,1,3);
 		try {
-			simulation.generateSimulation(50);
+			//simulation.generateSimulation(1,50,Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT),5);
+			simulation.generateSimulation(1,50);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,8 +100,8 @@ public class Test {
 		System.out.println("Ultimo elemento de la cola: " +  simulation.getQueuService().getLast().getIdStudent());
 		System.out.println("perimer elemento de la cola: " +  simulation.getQueuService().getFirst().getIdStudent());
 		//System.out.println("Lista auxiliar:  " +  simulation.getListAux().getSize());
-//		Stack<Student> stack = simulation.getStack();
-//		System.out.println(stack.size());
+////		Stack<Student> stack = simulation.getStack();
+////		System.out.println(stack.size());
 
 		
 	}

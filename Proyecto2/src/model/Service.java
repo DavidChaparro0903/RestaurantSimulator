@@ -9,7 +9,7 @@ public class Service {
 	private Student student;
 	private Lunch lunch;
 	private int timeService;
-	
+	private String messageResult;
 	
 	public Service() {
 		
@@ -68,16 +68,29 @@ public class Service {
 	 * */
 	
 	public String updateTimeService() {
+		messageResult = "";
 		if(this.isBusy()) {
 			 this.substractService();
-			System.out.println("Tiempo de restante de atencion almuerzo: "+ this. getTimeService() + "  Para el estudiante: " + student.getIdStudent());
-			System.out.println("Entro a recibir el almuerzo el estudiante: " + student.getIdStudent() + " El almuerzo: " + lunch.getIdLunch());
+			messageResult += "Tiempo de restante de atencion almuerzo: "+ this. getTimeService() + "  Para el estudiante: " + student.getIdStudent() + " Recibio el almuerzo: " +  lunch.getIdLunch() +"\n";
+			//System.out.println("Tiempo de restante de atencion almuerzo: "+ this. getTimeService() + "  Para el estudiante: " + student.getIdStudent() + " Recibio el almuerzo: " +  lunch.getIdLunch());
+			//System.out.println("Entro a recibir el almuerzo el estudiante: " + student.getIdStudent() + " El almuerzo: " + lunch.getIdLunch());
 			 if(this.finishService()) {
+				 messageResult += "Termino la atencion para el estudiante: " + student.getIdStudent();
 				return liberateService();
 			 }
 		}
 		return null;
 	}
+	
+	
+	
+	
+	
+	public String getMessageResult() {
+		return messageResult;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "El estudiante: " + student.getIdStudent() +" Salio con el menaje :"+ lunch.getIdLunch();
