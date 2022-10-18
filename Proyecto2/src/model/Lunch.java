@@ -23,5 +23,12 @@ public class Lunch {
 	public void setIdLunch(String idLunch) {
 		this.idLunch = idLunch;
 	}
+	
+	public static void initalizedCountLunch() {
+		 countLunch = 1;
+	}
+	
+	
+	
 
 }

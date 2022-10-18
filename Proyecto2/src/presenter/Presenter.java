@@ -9,6 +9,7 @@ public class Presenter {
 	
 	private SimulationRestaurant simulation;
 	private View view;
+	private int time = -1;
 	
 	
 	public Presenter() {
@@ -27,6 +28,10 @@ public class Presenter {
 				init();
 				break;
 			case 2:
+				resumeSimulation();
+				init();
+				break;
+			case 3:
 				view.messageFinal();
 				break;
 			default:
@@ -44,8 +49,20 @@ public class Presenter {
 	
 	public void generateSimulation() {
 		int simulationTime = view.getTime();
+		simulation.initializedSimulation();
+		initializedSimulation(simulationTime);
+	}
+	
+	public void resumeSimulation() {
+	
+		resumeSimulationAux();
+	}
+	
+	
+	public  void initializedSimulation(int simulationTime) {
 		try {
-			simulation.initializedSimulation();
+			//int simulationTime = view.getTime();
+			int value = 0;
 			for (int i = 1; i <= simulationTime; i++) {
 				view.showTimeSimulation(i);
 				isTimeCreateStudent();
@@ -57,13 +74,55 @@ public class Presenter {
 				showReceiveLunch();
 				showStudentsWithLunch();
 				view.showFinishLine();	
+				value = i;
 				Thread.sleep(0);
 			}	
+			time = value;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
+	
+	
+	public void resumeSimulationAux() {
+		if(time >= 0) {
+			int simulationTime = view.getTime();
+			if(simulationTime > 0) {
+				int value = 0;
+				int aux = time + 1;
+				for (int i = aux; i <= (aux+simulationTime - 1); i++) {
+					view.showTimeSimulation(i);
+					isTimeCreateStudent();
+					isTimeCreateLuch();
+					showArriveQueu();
+					showPointPay();
+					showfillAuxiliaryList();
+					showQueuReceiveLunch();
+					showReceiveLunch();
+					showStudentsWithLunch();
+					view.showFinishLine();	
+					value = i;
+					try {
+						Thread.sleep(0);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					time = value;
+				}	
+			}else {
+				view.messageErrorEnterNumberCorrectResume();
+			}
+			
+		}else {
+			view.messageErrorResume();
+		}
+		
+	}
+	
+	
+	
 	
 	
 	public  void isTimeCreateStudent() {

@@ -1,8 +1,6 @@
 package view;
 
-import java.util.Iterator;
 import java.util.Scanner;
-
 import constants.Constants;
 
 public class View {
@@ -84,14 +82,9 @@ public class View {
 		System.out.println("\nServicio de atencion para el menaje:\n");
 		System.out.println(result);
 	}
-//	
-//	public void showTotalMoneyPayPoint(String result) {
-//		System.out.println(result);
-//	}
-	
+
 	public void showFinishLine() {
 		System.out.println("*********************************************************************************************************************************************");
-		//System.out.println("----------------------------------------------------------------");
 	}
 
 
@@ -119,6 +112,12 @@ public class View {
 		System.err.println("Por favor Ingrese un numero en el rango que se encuentra en el menu");
 	}
 	
+	public void messageErrorResume() {
+		System.err.println("Por favor primero ejecute una simulacion antes de reanudarla");
+	}
 	
+	public void messageErrorEnterNumberCorrectResume() {
+		System.err.println("Ingrese un tiempo de simulacion correcto");
+	}
 	
 }

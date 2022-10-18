@@ -57,6 +57,8 @@ public class SimulationRestaurant {
 		service = new Service();
 		countGenerateStudent = Tool.getRandom(Constants.LOWER_RANGE_GENERATE_STUDENT, Constants.UPPER_RANGE_GENERATE_STUDENT);
 		countGenerateLunch = Constants.LUNCH_TIME;
+		initalizedCountStudent();
+		initalizedCountLunch();
 		
 	}
 	
@@ -317,6 +319,14 @@ public class SimulationRestaurant {
 		return "El dinero recogido del punto de pago 2 es: " + payPointTwo.getBill();
 	}
 
+	public static void initalizedCountStudent() {
+		Student.initalizedCountStudent();
+	}
+	
+	public static void initalizedCountLunch() {
+		Lunch.initalizedCountLunch();
+	}
+	
 	
 	
 }

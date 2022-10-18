@@ -55,6 +55,12 @@ public class Student {
 	public int subtractDisplacementTime() {
 		return displacementTime--;
 	}
+	
+	public static void initalizedCountStudent() {
+		countStudent = 1;
+	}
 
+	
+	
 
 }
