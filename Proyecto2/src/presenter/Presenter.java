@@ -75,7 +75,7 @@ public class Presenter {
 				showStudentsWithLunch();
 				view.showFinishLine();	
 				value = i;
-				Thread.sleep(0);
+				Thread.sleep(5000);
 			}	
 			time = value;
 		} catch (InterruptedException e) {
@@ -104,7 +104,7 @@ public class Presenter {
 					view.showFinishLine();	
 					value = i;
 					try {
-						Thread.sleep(0);
+						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
